@@ -1,0 +1,52 @@
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'idea'
+
+mainClassName = 'Game'
+version = '0.0.1'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.lwjgl.lwjgl:lwjgl:2.9.3'
+    compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.3'
+    implementation group: 'org.slick2d', name: 'slick2d-core', version: '1.0.2'
+
+}
+
+run {
+    systemProperty "java.library.path", "./build/natives/windows/:./build/natives/linux/:./build/natives/osx/"
+}
+
+task natives {
+    def resolvedArtifacts = configurations.compile.resolvedConfiguration.resolvedArtifacts
+    osNatives('windows', resolvedArtifacts)
+    osNatives('linux', resolvedArtifacts)
+    osNatives('osx', resolvedArtifacts)
+}
+
+def osNatives(os, artifacts) {
+    copy {
+        def classifier = 'natives-' + os
+        def matches = artifacts.findAll { it.classifier == classifier }
+        from matches.collect { it.file }.collect { zipTree(it) }
+        into "$buildDir/natives/" + os
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src/main/java"]
+        }
+    }
+}
