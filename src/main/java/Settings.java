@@ -15,6 +15,8 @@ public class Settings
     public static int blockBreakButton;
     public static int blockPlaceButton;
 
+    public static long window;
+
     public Settings()
     {
     }

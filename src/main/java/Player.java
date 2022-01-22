@@ -1,5 +1,7 @@
 import java.util.Random;
 
+import static org.lwjgl.glfw.GLFW.*;
+
 /**
  * Created by Gazibalonchik on 11.01.2016.
  * Класс игрока
@@ -16,7 +18,7 @@ public class Player extends Entity
     public Player()
     {
         height = 1.5f;
-        camera = new Camera(positionX, positionY + height, positionZ, 0.0, 0.0, 0.0, 60.0f);
+        camera = new Camera(positionX, positionY + height, positionZ, 0.0, 0.0, 0.0, 80.0f);
         setPosition(0.0, 128.0, 0.0);
         speed = 32.0f;
         handsBlockID = 1;
@@ -31,9 +33,9 @@ public class Player extends Entity
         double distance = 0.0;
         double step = 0.001;
 
-        for(char i = '1'; i < '9'; i++)
-            if(keys[i - 47] == KeyState.PRESSEDNOW)
-                handsBlockID = i - '0';
+        for(int i = 1; i < 9; i++)
+            if(keys[GLFW_KEY_0 + i] == KeyState.PRESSEDNOW)
+                handsBlockID = i;
 
         if(keys[Settings.jumpKey].pressed() && buttons[Settings.blockPlaceButton] == KeyState.PRESSEDNOW)
             world.addEntity(new EntityMinecart(getPositionX(), getPositionY(), getPositionZ()));
