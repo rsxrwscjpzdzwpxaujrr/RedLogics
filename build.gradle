@@ -34,6 +34,16 @@ dependencies {
     compile group: 'org.lwjgl', name: 'lwjgl-glfw'  , version:'3.3.0', classifier:'natives-macos'
 }
 
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'Game'
+    }
+
+    classifier = 'all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
 sourceSets {
     main {
         java {
